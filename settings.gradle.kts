@@ -14,8 +14,8 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "ColorPicker"
-include(":colorPicker")
+rootProject.name = "compose-color-picker"
+include(":compose-color-picker")
 if (System.getenv("JITPACK") == null) {
     include(":sample")
 }
