@@ -49,7 +49,7 @@ publishing {
         create<MavenPublication>("maven") {
             groupId = "com.hristogochev"
             artifactId = "compose-color-picker"
-            version = "1.0.0"
+            version = "0.0.1"
 
             afterEvaluate {
                 from(components["release"])
