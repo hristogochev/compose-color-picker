@@ -7,19 +7,19 @@ plugins {
 }
 
 android {
-    namespace =  "io.mhssn.samplecolorpicker"
-    compileSdk = 33
+    namespace = "io.mhssn.samplecolorpicker"
+    compileSdk = 34
 
     defaultConfig {
-        applicationId =  "io.mhssn.samplecolorpicker"
+        applicationId = "io.mhssn.samplecolorpicker"
         minSdk = 21
-        targetSdk = 33
-        versionCode= 1
-        versionName ="1.0"
+        targetSdk = 34
+        versionCode = 1
+        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
-            useSupportLibrary=  true
+            useSupportLibrary = true
         }
     }
 
@@ -45,9 +45,9 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.6"
+        kotlinCompilerExtensionVersion = "1.5.0"
     }
-    packaging{
+    packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }

@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace = "io.mhssn.colorpicker"
-    this.compileSdkVersion = "android-33"
+    this.compileSdkVersion = "android-34"
 
     defaultConfig {
         minSdk = 21
@@ -33,24 +33,18 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.6"
+        kotlinCompilerExtensionVersion = "1.5.0"
     }
-    defaultConfig {
-        aarMetadata {
-            minCompileSdk = 33
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+            withJavadocJar()
         }
     }
+
 }
 
 
-//val sourcesJar by tasks.registering(Jar::class) {
-//    archiveClassifier.set("sources")
-//    from(sourceSets["main"].allSource)
-//}
-
-val javadocJar by tasks.registering(Jar::class) {
-    archiveClassifier.set("javadoc")
-}
 
 publishing {
     publications {
@@ -58,9 +52,6 @@ publishing {
             groupId = "com.hristogochev"
             artifactId = "compose-color-picker"
             version = "1.0.0"
-
-            artifact(javadocJar)
-//            artifact(sourcesJar)
 
             afterEvaluate {
                 from(components["release"])
