@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 pluginManagement {
     repositories {
         gradlePluginPortal()
@@ -13,5 +15,7 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "ColorPicker"
-include ':sample'
-include ':colorPicker'
+include(":colorPicker")
+if (System.getenv("JITPACK") == null) {
+    include(":sample")
+}
