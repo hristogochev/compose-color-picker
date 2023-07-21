@@ -10,11 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Paint
-import androidx.compose.ui.graphics.PaintingStyle
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
@@ -51,14 +47,6 @@ internal fun SimpleRingColorPicker(
     var radius by remember {
         mutableStateOf(0f)
     }
-    LaunchedEffect(pickerLocation) {
-        onPickedColor(
-            getColorAt(
-                pickerLocation.x / sectorsCount.toFloat(),
-                (pickerLocation.y / tracksCount.toFloat()).coerceIn(0f, 1f)
-            )
-        )
-    }
     Canvas(modifier = modifier
         .size(280.dp)
         .aspectRatio(1f)
@@ -87,6 +75,14 @@ internal fun SimpleRingColorPicker(
                                 .roundToInt()
                                 .coerceIn(0, tracksCount - 1)
                         )
+                    onPickedColor(
+                        getColorAt(
+                            pickerLocation.x,
+                            pickerLocation.y,
+                            sectorsCount,
+                            tracksCount
+                        )
+                    )
                 }
             }
             return@pointerInteropFilter true
@@ -95,10 +91,7 @@ internal fun SimpleRingColorPicker(
             repeat(sectorsCount) {
                 val degree = 360f / sectorsCount * it
                 drawArc(
-                    getColorAt(
-                        it / sectorsCount.toFloat(),
-                        (track / tracksCount.toFloat()).coerceIn(0f, 1f)
-                    ),
+                    getColorAt(it, track, sectorsCount, tracksCount),
                     degree,
                     360f / sectorsCount,
                     false,
@@ -114,31 +107,17 @@ internal fun SimpleRingColorPicker(
                 )
             }
         }
-        this.drawIntoCanvas {
-            val paint = Paint()
-            paint.style = PaintingStyle.Stroke
-            paint.strokeWidth = selectColorWidth
-            val frameworkPaint = paint.asFrameworkPaint()
-            frameworkPaint.color = getColorAt(
-                pickerLocation.x / sectorsCount.toFloat(),
-                (pickerLocation.y / tracksCount.toFloat()).coerceIn(0f, 1f)
-            ).toArgb()
-            frameworkPaint.setShadowLayer(50f, 0f, 0f, Color.Black.copy(alpha = 0.4f).toArgb())
-            it.drawArc(
-                pickerLocation.y * colorWidthPx + colorWidthPx / 2 + selectColorWidth / 2,
-                pickerLocation.y * colorWidthPx + colorWidthPx / 2 + selectColorWidth / 2,
-                (pickerLocation.y * colorWidthPx) + colorWidthPx / 2 + selectColorWidth / 2 + size.width - (pickerLocation.y * colorWidthPx * 2) - colorWidthPx - selectColorWidth,
-                (pickerLocation.y * colorWidthPx) + colorWidthPx / 2 + selectColorWidth / 2 + size.height - (pickerLocation.y * colorWidthPx * 2) - colorWidthPx - selectColorWidth,
-                360 / sectorsCount.toFloat() * pickerLocation.x,
-                360f / sectorsCount,
-                false,
-                paint
-            )
-        }
     }
 }
 
-private fun getColorAt(progress: Float, deepProgress: Float): Color {
+private fun getColorAt(
+    pickerLocationX: Int,
+    pickerLocationY: Int,
+    sectorsCount: Int,
+    tracksCount: Int
+): Color {
+    val progress = pickerLocationX.toFloat() / sectorsCount.toFloat()
+    val deepProgress = (pickerLocationY.toFloat() / tracksCount.toFloat()).coerceIn(0f, 1f)
     val (rangeProgress, range) = ColorPickerHelper.calculateRangeProgress(progress.toDouble())
     val red: Int
     val green: Int
@@ -152,6 +131,7 @@ private fun getColorAt(progress: Float, deepProgress: Float): Color {
             blue = 0.0
                 .roundToInt()
         }
+
         ColorRange.YellowToGreen -> {
             red = (255 * (1 - rangeProgress))
                 .roundToInt()
@@ -159,6 +139,7 @@ private fun getColorAt(progress: Float, deepProgress: Float): Color {
             blue = 0.0
                 .roundToInt()
         }
+
         ColorRange.GreenToCyan -> {
             red = 0.0
                 .roundToInt()
@@ -166,6 +147,7 @@ private fun getColorAt(progress: Float, deepProgress: Float): Color {
             blue = (255 * rangeProgress)
                 .roundToInt()
         }
+
         ColorRange.CyanToBlue -> {
             red = 0.0
                 .roundToInt()
@@ -173,6 +155,7 @@ private fun getColorAt(progress: Float, deepProgress: Float): Color {
                 .roundToInt()
             blue = 255
         }
+
         ColorRange.BlueToPurple -> {
             red = (255 * rangeProgress)
                 .roundToInt()
@@ -180,6 +163,7 @@ private fun getColorAt(progress: Float, deepProgress: Float): Color {
                 .roundToInt()
             blue = 255
         }
+
         ColorRange.PurpleToRed -> {
             red = 255
             green = 0.0
