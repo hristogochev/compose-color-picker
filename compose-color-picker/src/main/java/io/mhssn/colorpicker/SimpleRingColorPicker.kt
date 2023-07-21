@@ -122,7 +122,7 @@ private fun Int.darken(darkness: Float): Int {
     return (this - this * darkness).roundToInt()
 }
 
-internal enum class ColorRange {
+private enum class ColorRange {
     RedToYellow,
     YellowToGreen,
     GreenToCyan,
