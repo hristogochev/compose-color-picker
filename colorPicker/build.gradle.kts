@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace = "io.mhssn.colorpicker"
-    this.compileSdkVersion = "android-34"
+    this.compileSdkVersion = "android-33"
 
     defaultConfig {
         minSdk = 21

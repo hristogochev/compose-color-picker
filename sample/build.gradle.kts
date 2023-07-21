@@ -8,12 +8,12 @@ plugins {
 
 android {
     namespace = "io.mhssn.samplecolorpicker"
-    compileSdk = 34
+    compileSdk = 33
 
     defaultConfig {
         applicationId = "io.mhssn.samplecolorpicker"
         minSdk = 21
-        targetSdk = 34
+        targetSdk = 33
         versionCode = 1
         versionName = "1.0"
 
