@@ -33,7 +33,9 @@ fun SimpleRingColorPicker(
     colorWidth: Dp = 20.dp,
     tracksCount: Int = 5,
     sectorsCount: Int = 24,
-    onPickedColor: (Color) -> Unit
+    onFingerDown: () -> Unit = {},
+    onFingerUp: () -> Unit = {},
+    onPickedColor: (Color) -> Unit,
 ) {
     val density = LocalDensity.current
     val colorWidthPx = remember {
@@ -58,6 +60,7 @@ fun SimpleRingColorPicker(
             .pointerInteropFilter {
                 when (it.action) {
                     MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE -> {
+                        onFingerDown()
                         val length = getLength(it.x, it.y, radius)
                         val offset = radius - colorWidthPx * tracksCount
                         val trackProgress =
@@ -85,6 +88,10 @@ fun SimpleRingColorPicker(
                                 tracksCount
                             )
                         )
+                    }
+
+                    MotionEvent.ACTION_UP -> {
+                        onFingerUp()
                     }
                 }
                 return@pointerInteropFilter true
